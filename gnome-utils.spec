@@ -3,7 +3,7 @@
 %define libname %mklibname gdict1.0_ %{major}
 Summary: GNOME utility programs such as file search and calculator
 Name: gnome-utils
-Version: 2.18.0
+Version: 2.18.1
 Epoch: 1
 Release: %mkrel 1
 License: LGPL
@@ -40,7 +40,7 @@ BuildRequires:	ncurses-devel
 BuildRequires:	pam-devel
 BuildRequires:	usermode
 BuildRequires:  scrollkeeper
-BuildRequires:	gnome-doc-utils libxslt-proc
+BuildRequires:	gnome-doc-utils
 #BuildRequires:  gtk-doc
 BuildRequires:  perl-XML-Parser
 BuildRequires:  desktop-file-utils
@@ -266,5 +266,3 @@ rm -rf $RPM_BUILD_ROOT
 %_libdir/pkgconfig/gdict*.pc
 %{_datadir}/gtk-doc/html/gdict
 %_includedir/gdict*
-
-
