@@ -1,9 +1,10 @@
 %define schemas baobab gnome-dictionary gfloppy gnome-screenshot gnome-search-tool logview
 %define major 5
 %define libname %mklibname gdict1.0_ %{major}
+%define libnamedev %mklibname -d gdict1.0
 Summary: GNOME utility programs such as file search and calculator
 Name: gnome-utils
-Version: 2.18.1
+Version: 2.19.90
 Epoch: 1
 Release: %mkrel 1
 License: LGPL
@@ -79,13 +80,14 @@ Summary: GNOME dictionary shared library
 %description -n %libname
 This is the shared library required by the GNOME Dictionary.
 
-%package -n %libname-devel
+%package -n %libnamedev
 Group: Development/C
 Summary: GNOME dictionary library development files
 Requires: %libname = %epoch:%version
 Provides: libgdict1.0-devel = %epoch:%version-%release
+Obsoletes: %mklibname -d gdict1.0_ 5
 
-%description -n %libname-devel
+%description -n %libnamedev
 This is the shared library required by the GNOME Dictionary.
 
 %prep
@@ -259,7 +261,7 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(-, root, root)
 %_libdir/libgdict-1.0.so.%{major}*
 
-%files -n %libname-devel
+%files -n %libnamedev
 %defattr(-, root, root)
 %_libdir/libgdict*.so
 %attr(644,root,root) %_libdir/libgdict*a
