@@ -6,7 +6,7 @@ Summary: GNOME utility programs such as file search and calculator
 Name: gnome-utils
 Version: 2.19.90
 Epoch: 1
-Release: %mkrel 1
+Release: %mkrel 2
 License: LGPL
 Group:  Graphical desktop/GNOME
 Source0: ftp://ftp.gnome.org/pub/GNOME/sources/%{name}/%{name}-%{version}.tar.bz2
@@ -26,6 +26,8 @@ Source36: logview-16.png
 Patch0: gnome-utils-2.0.5-pam.patch
 Patch1: gnome-utils-2.12.2-pam_pwdb.patch
 Patch2: gnome-utils-gfloppy-device.patch
+# (fc) 2.19.90-2mdv fix support for XDG directory (Mdv bug #32776)
+Patch3: gnome-utils-2.19.90-xdg.patch
 BuildRoot: %{_tmppath}/%{name}-%{version}-buildroot
 URL: http://www.gnome.org/softwaremap/projects/gnome-utils/
 
@@ -95,6 +97,7 @@ This is the shared library required by the GNOME Dictionary.
 %patch0 -p1 -b .pam
 %patch1 -p1 -b .pam_pwdb
 %patch2 -p0 -b .device
+%patch3 -p1 -b .xdg
 
 %build
 
@@ -133,52 +136,6 @@ cp %{SOURCE34} $RPM_BUILD_ROOT/%{_liconsdir}/logview.png
 cp %{SOURCE35} $RPM_BUILD_ROOT/%{_iconsdir}/logview.png
 cp %{SOURCE36} $RPM_BUILD_ROOT/%{_miconsdir}/logview.png
 
-#
-# Lots of menu entries
-#
-mkdir -p $RPM_BUILD_ROOT%{_menudir}
-cat << EOF > $RPM_BUILD_ROOT%{_menudir}/%{name}
-?package(%{name}): \
-	needs="X11" \
-	section="System/Configuration/Hardware" \
-	title="Floppy Formatter" \
-	longtitle="Format Floppy Disks" \
-	command="%{_bindir}/gfloppy --device=/dev/fd0" \
-	icon="gfloppy.png" \
-	startup_notify="true" xdg="true"
-?package(%{name}): \
-	needs="X11" \
-	section="System/File Tools" \
-	title="Search for Files" \
-	longtitle="Search your disk for files" \
-	command="%{_bindir}/gnome-search-tool"\
-	icon="gnome-searchtool.png" \
-	startup_notify="true" xdg="true"
-?package(%{name}): \
-	needs="X11" \
-	section="System/Monitoring" \
-	title="System Log" \
-	longtitle="View the system log file" \
-	command="%{_bindir}/gnome-system-log"\
-	icon="logview.png" \
-	startup_notify="true" xdg="true"
-?package(%{name}): \
-	needs="X11" \
-	section="Office/Accessories" \
-	title="GNOME Dictionary" \
-	longtitle="Lookup words in an online dictionary" \
-	command="%{_bindir}/gnome-dictionary"\
-	icon="gdict.png" \
-	startup_notify="true" xdg="true"
-?package(%{name}): \
-	needs="X11" \
-	section="System/File Tools" \
-	title="Disk Usage Analyser" \
-	longtitle="A graphical tool to analyse disk usage" \
-	command="%{_bindir}/baobab"\
-	icon="baobab.png" \
-	startup_notify="true" xdg="true"
-EOF
 desktop-file-install --vendor="" \
   --remove-category="Application" \
   --add-category="X-MandrivaLinux-System-Configuration-Hardware" \
@@ -196,6 +153,15 @@ desktop-file-install --vendor="" \
   --add-category="X-MandrivaLinux-Office-Accessories" \
   --dir $RPM_BUILD_ROOT%{_datadir}/applications $RPM_BUILD_ROOT%{_datadir}/applications/gnome-dictionary.desktop
 
+for i in gfloppy.desktop gnome-search-tool.desktop gnome-system-log.desktop gnome-dictionary.desktop gnome-screenshot.desktop ; do
+cat << EOF >> $RPM_BUILD_ROOT%{_datadir}/applications/$i
+NotShowIn=KDE;
+EOF
+done
+
+for i in $RPM_BUILD_ROOT%{_datadir}/applications/* ; do
+ desktop-file-validate $i
+done
 
 %post
 %update_scrollkeeper
@@ -250,7 +216,6 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{_datadir}/omf/*
 %{_datadir}/omf/*/*-C.omf
 %_datadir/icons/hicolor/*/apps/*
-%{_menudir}/*
 %{_mandir}/*/*
 %{_liconsdir}/*.png
 %{_iconsdir}/*.png
