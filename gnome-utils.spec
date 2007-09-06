@@ -4,7 +4,7 @@
 %define libnamedev %mklibname -d gdict1.0
 Summary: GNOME utility programs such as file search and calculator
 Name: gnome-utils
-Version: 2.19.91
+Version: 2.19.92
 Epoch: 1
 Release: %mkrel 1
 License: LGPL
@@ -26,6 +26,7 @@ Source36: logview-16.png
 Patch0: gnome-utils-2.0.5-pam.patch
 Patch1: gnome-utils-2.12.2-pam_pwdb.patch
 Patch2: gnome-utils-gfloppy-device.patch
+Patch3: gnome-utils-2.19.92-desktopentry.patch
 BuildRoot: %{_tmppath}/%{name}-%{version}-buildroot
 URL: http://www.gnome.org/softwaremap/projects/gnome-utils/
 
@@ -95,6 +96,7 @@ This is the shared library required by the GNOME Dictionary.
 %patch0 -p1 -b .pam
 %patch1 -p1 -b .pam_pwdb
 %patch2 -p0 -b .device
+%patch3 -p1
 
 %build
 
@@ -149,12 +151,6 @@ desktop-file-install --vendor="" \
   --remove-category="Application" \
   --add-category="X-MandrivaLinux-Office-Accessories" \
   --dir $RPM_BUILD_ROOT%{_datadir}/applications $RPM_BUILD_ROOT%{_datadir}/applications/gnome-dictionary.desktop
-
-for i in gfloppy.desktop gnome-search-tool.desktop gnome-system-log.desktop gnome-dictionary.desktop gnome-screenshot.desktop ; do
-cat << EOF >> $RPM_BUILD_ROOT%{_datadir}/applications/$i
-NotShowIn=KDE;
-EOF
-done
 
 for i in $RPM_BUILD_ROOT%{_datadir}/applications/* ; do
  desktop-file-validate $i
