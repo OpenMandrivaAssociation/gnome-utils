@@ -6,7 +6,7 @@ Summary: GNOME utility programs such as file search and calculator
 Name: gnome-utils
 Version: 2.19.92
 Epoch: 1
-Release: %mkrel 1
+Release: %mkrel 2
 License: LGPL
 Group:  Graphical desktop/GNOME
 Source0: ftp://ftp.gnome.org/pub/GNOME/sources/%{name}/%{name}-%{version}.tar.bz2
@@ -27,6 +27,8 @@ Patch0: gnome-utils-2.0.5-pam.patch
 Patch1: gnome-utils-2.12.2-pam_pwdb.patch
 Patch2: gnome-utils-gfloppy-device.patch
 Patch3: gnome-utils-2.19.92-desktopentry.patch
+# (fc) 2.19.92-2mdv unmount floppy before trying for format them (Mdv bug #24590)
+Patch4: gnome-utils-2.19.92-unmount-floppy.patch
 BuildRoot: %{_tmppath}/%{name}-%{version}-buildroot
 URL: http://www.gnome.org/softwaremap/projects/gnome-utils/
 
@@ -54,6 +56,7 @@ BuildRequires:  hal-devel
 
 Requires: usermode-consoleonly
 Requires: usermode 
+Requires: gnome-mount
 Requires(post): scrollkeeper
 Requires(postun): scrollkeeper
 
@@ -97,6 +100,7 @@ This is the shared library required by the GNOME Dictionary.
 %patch1 -p1 -b .pam_pwdb
 %patch2 -p0 -b .device
 %patch3 -p1
+%patch4 -p1 -b .unmount-floppy
 
 %build
 
