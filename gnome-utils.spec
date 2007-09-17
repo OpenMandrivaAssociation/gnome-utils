@@ -4,9 +4,9 @@
 %define libnamedev %mklibname -d gdict1.0
 Summary: GNOME utility programs such as file search and calculator
 Name: gnome-utils
-Version: 2.19.92
+Version: 2.20.0
 Epoch: 1
-Release: %mkrel 2
+Release: %mkrel 1
 License: LGPL
 Group:  Graphical desktop/GNOME
 Source0: ftp://ftp.gnome.org/pub/GNOME/sources/%{name}/%{name}-%{version}.tar.bz2
