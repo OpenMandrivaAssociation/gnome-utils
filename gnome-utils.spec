@@ -29,6 +29,7 @@ Patch2: gnome-utils-gfloppy-device.patch
 Patch3: gnome-utils-2.19.92-desktopentry.patch
 # (fc) 2.19.92-2mdv unmount floppy before trying for format them (Mdv bug #24590)
 Patch4: gnome-utils-2.19.92-unmount-floppy.patch
+BuildRoot: %{_tmppath}/%{name}-%{version}-buildroot
 URL: http://www.gnome.org/softwaremap/projects/gnome-utils/
 
 BuildRequires:  libpanel-applet-2-devel >= 2.9.4
