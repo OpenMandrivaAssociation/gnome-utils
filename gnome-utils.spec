@@ -50,9 +50,7 @@ BuildRequires:  perl-XML-Parser
 BuildRequires:  desktop-file-utils
 #needed for gfloppy
 BuildRequires:  e2fsprogs-devel
-%if %mdkversion >= 200610
 BuildRequires:  hal-devel
-%endif
 
 Requires: usermode-consoleonly
 Requires: usermode 
@@ -105,9 +103,7 @@ This is the shared library required by the GNOME Dictionary.
 %build
 
 %configure2_5x --enable-console-helper --enable-gfloppy \
-%if %mdkversion >= 200610
  --enable-hal
-%endif
 
 %make
 
