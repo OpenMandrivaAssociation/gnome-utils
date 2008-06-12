@@ -156,19 +156,23 @@ for i in $RPM_BUILD_ROOT%{_datadir}/applications/* ; do
  desktop-file-validate $i
 done
 
+%if %mdkversion < 200900
 %post
 %update_scrollkeeper
 %post_install_gconf_schemas %schemas
 %{update_menus}
 %update_icon_cache hicolor
+%endif
 
 %preun
 %preun_uninstall_gconf_schemas %schemas
 
+%if %mdkversion < 200900
 %postun
 %clean_scrollkeeper
 %{clean_menus}
 %clean_icon_cache hicolor
+%endif
 
 %if %mdkversion < 200900
 %post -n %libname -p /sbin/ldconfig
