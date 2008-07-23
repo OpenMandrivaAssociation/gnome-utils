@@ -6,8 +6,8 @@ Summary: GNOME utility programs such as file search and calculator
 Name: gnome-utils
 Version: 2.20.0.1
 Epoch: 1
-Release: %mkrel 3
-License: LGPL
+Release: %mkrel 4
+License: GPLv2+ and GFDL
 Group:  Graphical desktop/GNOME
 Source0: ftp://ftp.gnome.org/pub/GNOME/sources/%{name}/%{name}-%{version}.tar.bz2
 Source10: gdict_48.png
@@ -46,7 +46,7 @@ BuildRequires:	usermode
 BuildRequires:  scrollkeeper
 BuildRequires:	gnome-doc-utils
 #BuildRequires:  gtk-doc
-BuildRequires:  perl-XML-Parser
+BuildRequires:  intltool
 BuildRequires:  desktop-file-utils
 #needed for gfloppy
 BuildRequires:  e2fsprogs-devel
