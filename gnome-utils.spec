@@ -1,12 +1,12 @@
 %define schemas baobab gnome-dictionary gfloppy gnome-screenshot gnome-search-tool logview
-%define major 5
+%define major 6
 %define libname %mklibname gdict1.0_ %{major}
 %define libnamedev %mklibname -d gdict1.0
 Summary: GNOME utility programs such as file search and calculator
 Name: gnome-utils
-Version: 2.20.0.1
+Version: 2.23.90
 Epoch: 1
-Release: %mkrel 4
+Release: %mkrel 1
 License: GPLv2+ and GFDL
 Group:  Graphical desktop/GNOME
 Source0: ftp://ftp.gnome.org/pub/GNOME/sources/%{name}/%{name}-%{version}.tar.bz2
@@ -26,7 +26,6 @@ Source36: logview-16.png
 Patch0: gnome-utils-2.0.5-pam.patch
 Patch1: gnome-utils-2.12.2-pam_pwdb.patch
 Patch2: gnome-utils-gfloppy-device.patch
-Patch3: gnome-utils-2.19.92-desktopentry.patch
 # (fc) 2.19.92-2mdv unmount floppy before trying for format them (Mdv bug #24590)
 Patch4: gnome-utils-2.19.92-unmount-floppy.patch
 BuildRoot: %{_tmppath}/%{name}-%{version}-buildroot
@@ -34,7 +33,6 @@ URL: http://www.gnome.org/softwaremap/projects/gnome-utils/
 
 BuildRequires:  libpanel-applet-2-devel >= 2.9.4
 BuildRequires:  gnome-desktop-devel >= 2.2.0
-BuildRequires:	libgnomeprintui-devel >= 2.8.0
 BuildRequires:  libglade2.0-devel >= 2.3.0
 BuildRequires:  gnome-vfs2-devel >= 2.8.4
 BuildRequires:  avahi-glib-devel avahi-client-devel
@@ -97,7 +95,6 @@ This is the shared library required by the GNOME Dictionary.
 %patch0 -p1 -b .pam
 %patch1 -p1 -b .pam_pwdb
 %patch2 -p0 -b .device
-%patch3 -p1
 %patch4 -p1 -b .unmount-floppy
 
 %build
