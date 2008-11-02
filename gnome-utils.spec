@@ -6,7 +6,7 @@ Summary: GNOME utility programs such as file search and calculator
 Name: gnome-utils
 Version: 2.24.1
 Epoch: 1
-Release: %mkrel 1
+Release: %mkrel 2
 License: GPLv2+ and GFDL
 Group:  Graphical desktop/GNOME
 Source0: ftp://ftp.gnome.org/pub/GNOME/sources/%{name}/%{name}-%{version}.tar.bz2
@@ -28,6 +28,8 @@ Patch1: gnome-utils-2.12.2-pam_pwdb.patch
 Patch2: gnome-utils-gfloppy-device.patch
 # (fc) 2.19.92-2mdv unmount floppy before trying for format them (Mdv bug #24590)
 Patch4: gnome-utils-2.19.92-unmount-floppy.patch
+#(blino) remove icon extension in gnome-dictionary desktop file (Gnome #558980)
+Patch5: gnome-utils-2.24.1-iconext.patch
 BuildRoot: %{_tmppath}/%{name}-%{version}-buildroot
 URL: http://www.gnome.org/softwaremap/projects/gnome-utils/
 
@@ -96,6 +98,7 @@ This is the shared library required by the GNOME Dictionary.
 %patch1 -p1 -b .pam_pwdb
 %patch2 -p0 -b .device
 %patch4 -p1 -b .unmount-floppy
+%patch5 -p1 -b .iconext
 
 %build
 
