@@ -45,6 +45,7 @@ BuildRequires:	pam-devel
 BuildRequires:	usermode
 BuildRequires:  scrollkeeper
 BuildRequires:	gnome-doc-utils
+BuildRequires:  gnome-common
 BuildRequires:  gtk-doc
 BuildRequires:  intltool
 BuildRequires:  desktop-file-utils
