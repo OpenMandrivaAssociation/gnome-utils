@@ -45,7 +45,7 @@ BuildRequires:	pam-devel
 BuildRequires:	usermode
 BuildRequires:  scrollkeeper
 BuildRequires:	gnome-doc-utils
-#BuildRequires:  gtk-doc
+BuildRequires:  gtk-doc
 BuildRequires:  intltool
 BuildRequires:  desktop-file-utils
 #needed for gfloppy
