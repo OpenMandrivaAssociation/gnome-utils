@@ -1,10 +1,10 @@
-%define schemas baobab gnome-dictionary gfloppy gnome-screenshot gnome-search-tool
+%define schemas baobab gnome-dictionary gfloppy gnome-screenshot gnome-search-tool gnome-system-log
 %define major 6
 %define libname %mklibname gdict1.0_ %{major}
 %define libnamedev %mklibname -d gdict1.0
 Summary: GNOME utility programs such as file search and calculator
 Name: gnome-utils
-Version: 2.25.1
+Version: 2.25.2
 Epoch: 1
 Release: %mkrel 1
 License: GPLv2+ and GFDL
@@ -161,6 +161,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_sysconfdir}/gconf/schemas/gnome-dictionary.schemas
 %{_sysconfdir}/gconf/schemas/gnome-screenshot.schemas
 %{_sysconfdir}/gconf/schemas/gnome-search-tool.schemas
+%{_sysconfdir}/gconf/schemas/gnome-system-log.schemas
 %_bindir/baobab
 %_bindir/gfloppy
 %_bindir/gnome-dictionary
