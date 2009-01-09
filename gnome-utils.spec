@@ -1,35 +1,21 @@
-%define schemas baobab gnome-dictionary gfloppy gnome-screenshot gnome-search-tool logview
+%define schemas baobab gnome-dictionary gfloppy gnome-screenshot gnome-search-tool
 %define major 6
 %define libname %mklibname gdict1.0_ %{major}
 %define libnamedev %mklibname -d gdict1.0
 Summary: GNOME utility programs such as file search and calculator
 Name: gnome-utils
-Version: 2.25.0
+Version: 2.25.1
 Epoch: 1
 Release: %mkrel 1
 License: GPLv2+ and GFDL
 Group:  Graphical desktop/GNOME
 Source0: ftp://ftp.gnome.org/pub/GNOME/sources/%{name}/%{name}-%{version}.tar.bz2
-Source10: gdict_48.png
-Source11: gdict_32.png
-Source12: gdict_16.png
-Source13: gfloppy-48.png
-Source14: gfloppy-32.png
-Source15: gfloppy-16.png
-Source22: gnome-searchtool-48.png
-Source23: gnome-searchtool-32.png
-Source24: gnome-searchtool-16.png
-Source34: logview-48.png
-Source35: logview-32.png
-Source36: logview-16.png
 
-Patch0: gnome-utils-2.0.5-pam.patch
-Patch1: gnome-utils-2.12.2-pam_pwdb.patch
 Patch2: gnome-utils-gfloppy-device.patch
 Patch3: gnome-utils-2.25.0-format-strings.patch
 # (fc) 2.19.92-2mdv unmount floppy before trying for format them (Mdv bug #24590)
 Patch4: gnome-utils-2.19.92-unmount-floppy.patch
-Patch6: gnome-utils-2.25.0-linking.patch
+Patch6: gnome-utils-2.25.1-linking.patch
 BuildRoot: %{_tmppath}/%{name}-%{version}-buildroot
 URL: http://www.gnome.org/softwaremap/projects/gnome-utils/
 
@@ -41,8 +27,6 @@ BuildRequires:  avahi-glib-devel avahi-client-devel
 BuildRequires:  libxmu-devel
 BuildRequires:  libgtop2.0-devel
 BuildRequires:	ncurses-devel
-BuildRequires:	pam-devel
-BuildRequires:	usermode
 BuildRequires:  scrollkeeper
 BuildRequires:	gnome-doc-utils
 BuildRequires:  gnome-common
@@ -53,8 +37,6 @@ BuildRequires:  desktop-file-utils
 BuildRequires:  e2fsprogs-devel
 BuildRequires:  hal-devel
 
-Requires: usermode-consoleonly
-Requires: usermode 
 Requires: gnome-mount
 Requires(post): scrollkeeper
 Requires(postun): scrollkeeper
@@ -95,8 +77,6 @@ This is the shared library required by the GNOME Dictionary.
 
 %prep
 %setup -q
-%patch0 -p1 -b .pam
-%patch1 -p1 -b .pam_pwdb
 %patch2 -p1 -b .device
 %patch3 -p1
 %patch4 -p1 -b .unmount-floppy
@@ -121,23 +101,6 @@ for omf in %buildroot%_datadir/omf/*/{*-??,*-??_??}.omf ;do
 echo "%lang($(basename $omf|sed -e s/.*-// -e s/.omf//)) $(echo $omf|sed s!%buildroot!!)" >> %name-2.0.lang
 done
 
-
-mkdir -p $RPM_BUILD_ROOT/%{_iconsdir}
-mkdir -p $RPM_BUILD_ROOT/%{_liconsdir}
-mkdir -p $RPM_BUILD_ROOT/%{_miconsdir}
-cp %{SOURCE10} $RPM_BUILD_ROOT/%{_liconsdir}/gdict.png
-cp %{SOURCE11} $RPM_BUILD_ROOT/%{_iconsdir}/gdict.png
-cp %{SOURCE12} $RPM_BUILD_ROOT/%{_miconsdir}/gdict.png
-cp %{SOURCE13} $RPM_BUILD_ROOT/%{_liconsdir}/gfloppy.png
-cp %{SOURCE14} $RPM_BUILD_ROOT/%{_iconsdir}/gfloppy.png
-cp %{SOURCE15} $RPM_BUILD_ROOT/%{_miconsdir}/gfloppy.png
-cp %{SOURCE22} $RPM_BUILD_ROOT/%{_liconsdir}/gnome-searchtool.png
-cp %{SOURCE23} $RPM_BUILD_ROOT/%{_iconsdir}/gnome-searchtool.png
-cp %{SOURCE24} $RPM_BUILD_ROOT/%{_miconsdir}/gnome-searchtool.png
-cp %{SOURCE34} $RPM_BUILD_ROOT/%{_liconsdir}/logview.png
-cp %{SOURCE35} $RPM_BUILD_ROOT/%{_iconsdir}/logview.png
-cp %{SOURCE36} $RPM_BUILD_ROOT/%{_miconsdir}/logview.png
-
 desktop-file-install --vendor="" \
   --remove-category="Application" \
   --add-category="X-MandrivaLinux-System-Configuration-Hardware" \
@@ -158,6 +121,8 @@ desktop-file-install --vendor="" \
 for i in $RPM_BUILD_ROOT%{_datadir}/applications/* ; do
  desktop-file-validate $i
 done
+
+rm -fv %buildroot%_bindir/test-reader
 
 %if %mdkversion < 200900
 %post
@@ -196,9 +161,6 @@ rm -rf $RPM_BUILD_ROOT
 %{_sysconfdir}/gconf/schemas/gnome-dictionary.schemas
 %{_sysconfdir}/gconf/schemas/gnome-screenshot.schemas
 %{_sysconfdir}/gconf/schemas/gnome-search-tool.schemas
-%{_sysconfdir}/gconf/schemas/logview.schemas
-%config(noreplace) %{_sysconfdir}/pam.d/*
-%config(noreplace) %{_sysconfdir}/security/console.apps/*
 %_bindir/baobab
 %_bindir/gfloppy
 %_bindir/gnome-dictionary
@@ -206,13 +168,11 @@ rm -rf $RPM_BUILD_ROOT
 %_bindir/gnome-screenshot
 %_bindir/gnome-search-tool
 %_bindir/gnome-system-log
-%{_sbindir}/*
 %{_libdir}/bonobo/servers/*
 %{_datadir}/applications/*
 %{_datadir}/baobab/
 %{_datadir}/gnome-screenshot
 %{_datadir}/gnome-utils
-%{_datadir}/gnome-system-log
 %{_datadir}/gnome-2.0/ui/*
 %_libexecdir/gnome-dictionary-applet
 %_datadir/gdict*
@@ -221,9 +181,6 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/omf/*/*-C.omf
 %_datadir/icons/hicolor/*/apps/*
 %{_mandir}/*/*
-%{_liconsdir}/*.png
-%{_iconsdir}/*.png
-%{_miconsdir}/*.png
 %{_datadir}/pixmaps/*
 
 %files -n %libname
