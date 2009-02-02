@@ -4,7 +4,7 @@
 %define libnamedev %mklibname -d gdict1.0
 Summary: GNOME utility programs such as file search and calculator
 Name: gnome-utils
-Version: 2.25.2
+Version: 2.25.90
 Epoch: 1
 Release: %mkrel 1
 License: GPLv2+ and GFDL
@@ -15,7 +15,7 @@ Patch2: gnome-utils-gfloppy-device.patch
 Patch3: gnome-utils-2.25.0-format-strings.patch
 # (fc) 2.19.92-2mdv unmount floppy before trying for format them (Mdv bug #24590)
 Patch4: gnome-utils-2.19.92-unmount-floppy.patch
-Patch6: gnome-utils-2.25.1-linking.patch
+Patch6: gnome-utils-2.25.90-linking.patch
 BuildRoot: %{_tmppath}/%{name}-%{version}-buildroot
 URL: http://www.gnome.org/softwaremap/projects/gnome-utils/
 
@@ -80,13 +80,12 @@ This is the shared library required by the GNOME Dictionary.
 %patch2 -p1 -b .device
 %patch3 -p1
 %patch4 -p1 -b .unmount-floppy
-%patch6 -p1
-autoreconf
+%patch6 -p1 -b .linking
+autoreconf -fi
 
 %build
 
-%configure2_5x --enable-console-helper --enable-gfloppy \
- --enable-hal
+%configure2_5x  --enable-gfloppy --enable-hal
 
 %make
 
