@@ -4,7 +4,7 @@
 %define libnamedev %mklibname -d gdict1.0
 Summary: GNOME utility programs such as file search and calculator
 Name: gnome-utils
-Version: 2.25.92
+Version: 2.26.0
 Epoch: 1
 Release: %mkrel 1
 License: GPLv2+ and GFDL
