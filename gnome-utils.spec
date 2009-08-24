@@ -4,14 +4,13 @@
 %define libnamedev %mklibname -d gdict1.0
 Summary: GNOME utility programs such as file search and calculator
 Name: gnome-utils
-Version: 2.27.2
+Version: 2.27.91
 Epoch: 1
 Release: %mkrel 1
 License: GPLv2+ and GFDL
 Group:  Graphical desktop/GNOME
 Source0: ftp://ftp.gnome.org/pub/GNOME/sources/%{name}/%{name}-%{version}.tar.bz2
 
-Patch3: gnome-utils-2.27.2-format-strings.patch
 BuildRoot: %{_tmppath}/%{name}-%{version}-buildroot
 URL: http://www.gnome.org/softwaremap/projects/gnome-utils/
 
@@ -20,6 +19,7 @@ BuildRequires:  libglade2.0-devel
 BuildRequires:  avahi-glib-devel avahi-client-devel
 BuildRequires:  libxmu-devel
 BuildRequires:  libgtop2.0-devel
+BuildRequires:  libcanberra-devel
 BuildRequires:	ncurses-devel
 BuildRequires:  scrollkeeper
 BuildRequires:	gnome-doc-utils
@@ -66,7 +66,6 @@ This is the shared library required by the GNOME Dictionary.
 
 %prep
 %setup -q
-%patch3 -p1 -b .format-strings
 
 %build
 
