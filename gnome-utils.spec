@@ -6,7 +6,7 @@ Summary: GNOME utility programs such as file search and calculator
 Name: gnome-utils
 Version: 2.27.91
 Epoch: 1
-Release: %mkrel 2
+Release: %mkrel 3
 License: GPLv2+ and GFDL
 Group:  Graphical desktop/GNOME
 Source0: ftp://ftp.gnome.org/pub/GNOME/sources/%{name}/%{name}-%{version}.tar.bz2
@@ -79,6 +79,27 @@ rm -rf $RPM_BUILD_ROOT
 GCONF_DISABLE_MAKEFILE_SCHEMA_INSTALL=1 %makeinstall_std
 rm -rf %buildroot/var
 
+# make gnome-system-log use consolehelper until it starts using polkit
+./mkinstalldirs $RPM_BUILD_ROOT%{_sysconfdir}/pam.d
+/bin/cat <<EOF >$RPM_BUILD_ROOT%{_sysconfdir}/pam.d/gnome-system-log
+#%%PAM-1.0
+auth		include		system-auth
+account		include		system-auth
+session		include		system-auth
+EOF
+
+./mkinstalldirs $RPM_BUILD_ROOT%{_sysconfdir}/security/console.apps
+/bin/cat <<EOF >$RPM_BUILD_ROOT%{_sysconfdir}/security/console.apps/gnome-system-log
+USER=root
+PROGRAM=/usr/sbin/gnome-system-log
+SESSION=true
+FALLBACK=true
+EOF
+
+./mkinstalldirs $RPM_BUILD_ROOT%{_sbindir}
+/bin/mv $RPM_BUILD_ROOT%{_bindir}/gnome-system-log $RPM_BUILD_ROOT%{_sbindir}
+/bin/ln -s /usr/bin/consolehelper $RPM_BUILD_ROOT%{_bindir}/gnome-system-log
+
 %{find_lang} %{name}-2.0 --with-gnome --all-name
 for omf in %buildroot%_datadir/omf/*/{*-??,*-??_??}.omf ;do
 echo "%lang($(basename $omf|sed -e s/.*-// -e s/.omf//)) $(echo $omf|sed s!%buildroot!!)" >> %name-2.0.lang
@@ -135,6 +156,8 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(-, root, root)
 
 %doc AUTHORS COPYING ChangeLog NEWS README
+%{_sysconfdir}/security/console.apps/gnome-system-log
+%{_sysconfdir}/pam.d/gnome-system-log
 %{_sysconfdir}/gconf/schemas/baobab.schemas
 %{_sysconfdir}/gconf/schemas/gnome-dictionary.schemas
 %{_sysconfdir}/gconf/schemas/gnome-screenshot.schemas
@@ -146,6 +169,7 @@ rm -rf $RPM_BUILD_ROOT
 %_bindir/gnome-screenshot
 %_bindir/gnome-search-tool
 %_bindir/gnome-system-log
+%{_sbindir}/gnome-system-log
 %{_libdir}/bonobo/servers/*
 %{_datadir}/applications/*
 %{_datadir}/baobab/
