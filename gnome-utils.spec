@@ -4,7 +4,7 @@
 %define libnamedev %mklibname -d gdict1.0
 Summary: GNOME utility programs such as file search and calculator
 Name: gnome-utils
-Version: 2.28.0
+Version: 2.28.1
 Epoch: 1
 Release: %mkrel 1
 License: GPLv2+ and GFDL
@@ -70,6 +70,9 @@ This is the shared library required by the GNOME Dictionary.
 %build
 
 %configure2_5x  --enable-hal
+
+#needed to ensure generated stuff is removed
+make clean
 
 %make
 
