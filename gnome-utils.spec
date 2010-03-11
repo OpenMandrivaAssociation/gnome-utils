@@ -15,7 +15,6 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-buildroot
 URL: http://www.gnome.org/softwaremap/projects/gnome-utils/
 
 BuildRequires:  libpanel-applet-2-devel >= 2.9.4
-BuildRequires:  libglade2.0-devel
 BuildRequires:  avahi-glib-devel avahi-client-devel
 BuildRequires:  libxmu-devel
 BuildRequires:  libgtop2.0-devel
