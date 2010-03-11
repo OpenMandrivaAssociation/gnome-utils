@@ -6,7 +6,7 @@ Summary: GNOME utility programs such as file search and calculator
 Name: gnome-utils
 Version: 2.29.5
 Epoch: 1
-Release: %mkrel 1
+Release: %mkrel 2
 License: GPLv2+ and GFDL
 Group:  Graphical desktop/GNOME
 Source0: ftp://ftp.gnome.org/pub/GNOME/sources/%{name}/%{name}-%{version}.tar.bz2
@@ -28,7 +28,6 @@ BuildRequires:  gtk-doc
 BuildRequires:  intltool
 BuildRequires:  desktop-file-utils
 
-Requires: gnome-mount
 Requires(post): scrollkeeper
 Requires(postun): scrollkeeper
 
