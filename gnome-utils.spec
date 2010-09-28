@@ -67,7 +67,7 @@ This is the shared library required by the GNOME Dictionary.
 
 %build
 
-%configure2_5x  --enable-hal
+%configure2_5x
 
 #needed to ensure generated stuff is removed
 make clean
