@@ -18,7 +18,7 @@ BuildRequires:  libpanel-applet-2-devel >= 2.9.4
 BuildRequires:  avahi-glib-devel avahi-client-devel
 BuildRequires:  libxmu-devel
 BuildRequires:  libgtop2.0-devel
-BuildRequires:  libcanberra-devel
+BuildRequires:  libcanberra-gtk-devel
 BuildRequires:	ncurses-devel
 BuildRequires:  scrollkeeper
 BuildRequires:	gnome-doc-utils
