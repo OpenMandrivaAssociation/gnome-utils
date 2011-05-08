@@ -10,6 +10,7 @@ Release: %mkrel 2
 License: GPLv2+ and GFDL
 Group:  Graphical desktop/GNOME
 Source0: ftp://ftp.gnome.org/pub/GNOME/sources/%{name}/%{name}-%{version}.tar.bz2
+Patch0: gnome-utils-2.32.0-enable-deprecated.patch
 
 BuildRoot: %{_tmppath}/%{name}-%{version}-buildroot
 URL: http://www.gnome.org/softwaremap/projects/gnome-utils/
@@ -64,20 +65,15 @@ This is the shared library required by the GNOME Dictionary.
 
 %prep
 %setup -q
+%patch0 -p0
 
 %build
-
-%configure2_5x
-
-#needed to ensure generated stuff is removed
-make clean
-
+%configure2_5x --disable-scrollkeeper --disable-schemas-install
 %make
 
 %install
 rm -rf $RPM_BUILD_ROOT
-
-GCONF_DISABLE_MAKEFILE_SCHEMA_INSTALL=1 %makeinstall_std
+%makeinstall_std
 rm -rf %buildroot/var
 
 # make gnome-system-log use consolehelper until it starts using polkit
