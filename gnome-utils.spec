@@ -72,30 +72,30 @@ This is the shared library required by the GNOME Dictionary.
 %make
 
 %install
-rm -rf $RPM_BUILD_ROOT
+rm -rf %{buildroot}
 %makeinstall_std
 rm -rf %buildroot/var
 
 # make gnome-system-log use consolehelper until it starts using polkit
-./mkinstalldirs $RPM_BUILD_ROOT%{_sysconfdir}/pam.d
-/bin/cat <<EOF >$RPM_BUILD_ROOT%{_sysconfdir}/pam.d/gnome-system-log
+./mkinstalldirs %{buildroot}%{_sysconfdir}/pam.d
+/bin/cat <<EOF >%{buildroot}%{_sysconfdir}/pam.d/gnome-system-log
 #%%PAM-1.0
 auth		include		system-auth
 account		include		system-auth
 session		include		system-auth
 EOF
 
-./mkinstalldirs $RPM_BUILD_ROOT%{_sysconfdir}/security/console.apps
-/bin/cat <<EOF >$RPM_BUILD_ROOT%{_sysconfdir}/security/console.apps/gnome-system-log
+./mkinstalldirs %{buildroot}%{_sysconfdir}/security/console.apps
+/bin/cat <<EOF >%{buildroot}%{_sysconfdir}/security/console.apps/gnome-system-log
 USER=root
 PROGRAM=/usr/sbin/gnome-system-log
 SESSION=true
 FALLBACK=true
 EOF
 
-./mkinstalldirs $RPM_BUILD_ROOT%{_sbindir}
-/bin/mv $RPM_BUILD_ROOT%{_bindir}/gnome-system-log $RPM_BUILD_ROOT%{_sbindir}
-/bin/ln -s /usr/bin/consolehelper $RPM_BUILD_ROOT%{_bindir}/gnome-system-log
+./mkinstalldirs %{buildroot}%{_sbindir}
+/bin/mv %{buildroot}%{_bindir}/gnome-system-log %{buildroot}%{_sbindir}
+/bin/ln -s /usr/bin/consolehelper %{buildroot}%{_bindir}/gnome-system-log
 
 %{find_lang} %{name}-2.0 --with-gnome --all-name
 for omf in %buildroot%_datadir/omf/*/{*-??,*-??_??}.omf ;do
@@ -105,17 +105,17 @@ done
 desktop-file-install --vendor="" \
   --remove-category="Application" \
   --add-category="X-MandrivaLinux-System-FileTools" \
-  --dir $RPM_BUILD_ROOT%{_datadir}/applications $RPM_BUILD_ROOT%{_datadir}/applications/{gnome-search-tool.desktop,baobab.desktop}
+  --dir %{buildroot}%{_datadir}/applications %{buildroot}%{_datadir}/applications/{gnome-search-tool.desktop,baobab.desktop}
 desktop-file-install --vendor="" \
   --remove-category="Application" \
   --add-category="X-MandrivaLinux-System-Monitoring" \
-  --dir $RPM_BUILD_ROOT%{_datadir}/applications $RPM_BUILD_ROOT%{_datadir}/applications/gnome-system-log.desktop
+  --dir %{buildroot}%{_datadir}/applications %{buildroot}%{_datadir}/applications/gnome-system-log.desktop
 desktop-file-install --vendor="" \
   --remove-category="Application" \
   --add-category="X-MandrivaLinux-Office-Accessories" \
-  --dir $RPM_BUILD_ROOT%{_datadir}/applications $RPM_BUILD_ROOT%{_datadir}/applications/gnome-dictionary.desktop
+  --dir %{buildroot}%{_datadir}/applications %{buildroot}%{_datadir}/applications/gnome-dictionary.desktop
 
-for i in $RPM_BUILD_ROOT%{_datadir}/applications/* ; do
+for i in %{buildroot}%{_datadir}/applications/* ; do
  desktop-file-validate $i
 done
 
@@ -147,7 +147,7 @@ rm -fv %buildroot%_bindir/test-reader
 %endif
 
 %clean
-rm -rf $RPM_BUILD_ROOT
+rm -rf %{buildroot}
 
 %files -f %{name}-2.0.lang
 %defattr(-, root, root)
