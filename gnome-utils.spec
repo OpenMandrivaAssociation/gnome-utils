@@ -1,42 +1,34 @@
-%define schemas baobab gnome-dictionary gnome-screenshot gnome-search-tool gnome-system-log
+%define api 1.0
 %define major 6
-%define libname %mklibname gdict1.0_ %{major}
-%define libnamedev %mklibname -d gdict1.0
+%define libname %mklibname gdict %{api} %{major}
+%define develname %mklibname -d gdict %{api}
+
 Summary: GNOME utility programs such as file search and calculator
 Name: gnome-utils
-Version: 2.32.0
 Epoch: 1
-Release: %mkrel 2
+Version: 3.2.1
+Release: 1
 License: GPLv2+ and GFDL
 Group:  Graphical desktop/GNOME
-Source0: ftp://ftp.gnome.org/pub/GNOME/sources/%{name}/%{name}-%{version}.tar.bz2
-Patch0: gnome-utils-2.32.0-enable-deprecated.patch
-
-BuildRoot: %{_tmppath}/%{name}-%{version}-buildroot
 URL: http://www.gnome.org/softwaremap/projects/gnome-utils/
+Source0: ftp://ftp.gnome.org/pub/GNOME/sources/%{name}/%{name}-%{version}.tar.xz
 
-BuildRequires:  libpanel-applet-2-devel >= 2.9.4
-BuildRequires:  avahi-glib-devel avahi-client-devel
-BuildRequires:  libxmu-devel
-BuildRequires:  libgtop2.0-devel
-BuildRequires:  libcanberra-gtk-devel
-BuildRequires:	ncurses-devel
-BuildRequires:  scrollkeeper
+BuildRequires:	gnome-common
 BuildRequires:	gnome-doc-utils
-BuildRequires:  gnome-common
-BuildRequires:  gtk-doc
-BuildRequires:  intltool
-BuildRequires:  desktop-file-utils
-
-Requires(post): scrollkeeper
-Requires(postun): scrollkeeper
-
-Obsoletes:	gnome-admin
-Obsoletes:	baobab
-Provides: gnome-admin
-Provides: baobab
-
-Conflicts: gnome-panel < 2.10.1
+BuildRequires:	gtk-doc
+BuildRequires:	intltool
+BuildRequires:	pkgconfig(gconf-2.0)
+BuildRequires:	pkgconfig(glib-2.0)
+BuildRequires:	pkgconfig(gsettings-desktop-schemas)
+BuildRequires:	pkgconfig(gthread-2.0)
+BuildRequires:	pkgconfig(gtk+-3.0)
+#BuildRequires:	pkgconfig(ice)
+BuildRequires:	libice-devel
+BuildRequires:	pkgconfig(libcanberra-gtk3)
+BuildRequires:	pkgconfig(libgtop-2.0)
+BuildRequires:	pkgconfig(sm)
+BuildRequires:	pkgconfig(x11)
+BuildRequires:	pkgconfig(xext)
 
 %description
 GNOME is the GNU Network Object Model Environment. This powerful
@@ -46,35 +38,38 @@ GNOME Utilities is a collection of small applications all there to make
 your day just that little bit brighter - System Log Viewer, 
 Search Tool, Dictionary.
 
-%package -n %libname
+%package -n %{libname}
 Group: System/Libraries
 Summary: GNOME dictionary shared library
 
-%description -n %libname
+%description -n %{libname}
 This is the shared library required by the GNOME Dictionary.
 
-%package -n %libnamedev
+%package -n %{develname}
 Group: Development/C
 Summary: GNOME dictionary library development files
-Requires: %libname = %epoch:%version
-Provides: libgdict1.0-devel = %epoch:%version-%release
-Obsoletes: %mklibname -d gdict1.0_ 5
+Requires: %{libname} = %{EVRD}
+Provides: libgdict1.0-devel = %{EVRD}
 
-%description -n %libnamedev
+%description -n %{develname}
 This is the shared library required by the GNOME Dictionary.
 
 %prep
 %setup -q
-%patch0 -p0
 
 %build
-%configure2_5x --disable-scrollkeeper --disable-schemas-install
-%make
+%configure2_5x \
+	--disable-static \
+	--disable-scrollkeeper \
+	--disable-schemas-install
+
+%make LIBS='-lgmodule-2.0 -lgthread-2.0'
 
 %install
 rm -rf %{buildroot}
 %makeinstall_std
-rm -rf %buildroot/var
+rm -rf %{buildroot}/var
+rm -fv %{buildroot}%{_bindir}/test-reader
 
 # make gnome-system-log use consolehelper until it starts using polkit
 ./mkinstalldirs %{buildroot}%{_sysconfdir}/pam.d
@@ -98,98 +93,45 @@ EOF
 /bin/ln -s /usr/bin/consolehelper %{buildroot}%{_bindir}/gnome-system-log
 
 %{find_lang} %{name}-2.0 --with-gnome --all-name
-for omf in %buildroot%_datadir/omf/*/{*-??,*-??_??}.omf ;do
-echo "%lang($(basename $omf|sed -e s/.*-// -e s/.omf//)) $(echo $omf|sed s!%buildroot!!)" >> %name-2.0.lang
-done
 
-desktop-file-install --vendor="" \
-  --remove-category="Application" \
-  --add-category="X-MandrivaLinux-System-FileTools" \
-  --dir %{buildroot}%{_datadir}/applications %{buildroot}%{_datadir}/applications/{gnome-search-tool.desktop,baobab.desktop}
-desktop-file-install --vendor="" \
-  --remove-category="Application" \
-  --add-category="X-MandrivaLinux-System-Monitoring" \
-  --dir %{buildroot}%{_datadir}/applications %{buildroot}%{_datadir}/applications/gnome-system-log.desktop
-desktop-file-install --vendor="" \
-  --remove-category="Application" \
-  --add-category="X-MandrivaLinux-Office-Accessories" \
-  --dir %{buildroot}%{_datadir}/applications %{buildroot}%{_datadir}/applications/gnome-dictionary.desktop
-
-for i in %{buildroot}%{_datadir}/applications/* ; do
- desktop-file-validate $i
-done
-
-rm -fv %buildroot%_bindir/test-reader
-
-%if %mdkversion < 200900
-%post
-%update_scrollkeeper
-%post_install_gconf_schemas %schemas
-%{update_menus}
-%update_icon_cache hicolor
-%endif
-
-%preun
-%preun_uninstall_gconf_schemas %schemas
-
-%if %mdkversion < 200900
-%postun
-%clean_scrollkeeper
-%{clean_menus}
-%clean_icon_cache hicolor
-%endif
-
-%if %mdkversion < 200900
-%post -n %libname -p /sbin/ldconfig
-%endif
-%if %mdkversion < 200900
-%postun -n %libname -p /sbin/ldconfig
-%endif
-
-%clean
-rm -rf %{buildroot}
 
 %files -f %{name}-2.0.lang
-%defattr(-, root, root)
-
 %doc AUTHORS COPYING ChangeLog NEWS README
 %{_sysconfdir}/security/console.apps/gnome-system-log
 %{_sysconfdir}/pam.d/gnome-system-log
-%{_sysconfdir}/gconf/schemas/baobab.schemas
-%{_sysconfdir}/gconf/schemas/gnome-dictionary.schemas
-%{_sysconfdir}/gconf/schemas/gnome-screenshot.schemas
 %{_sysconfdir}/gconf/schemas/gnome-search-tool.schemas
-%{_sysconfdir}/gconf/schemas/gnome-system-log.schemas
-%_bindir/baobab
-%_bindir/gnome-dictionary
-%_bindir/gnome-panel-screenshot
-%_bindir/gnome-screenshot
-%_bindir/gnome-search-tool
-%_bindir/gnome-system-log
+%{_bindir}/baobab
+%{_bindir}/gnome-dictionary
+%{_bindir}/gnome-font-viewer
+%{_bindir}/gnome-panel-screenshot
+%{_bindir}/gnome-screenshot
+%{_bindir}/gnome-search-tool
+%{_bindir}/gnome-system-log
+%{_bindir}/gnome-thumbnail-font
 %{_sbindir}/gnome-system-log
-%{_libdir}/bonobo/servers/*
 %{_datadir}/applications/*
 %{_datadir}/baobab/
+%{_datadir}/GConf/gsettings/gnome-screenshot.convert
+%{_datadir}/GConf/gsettings/logview.convert
+%{_datadir}/gdict*
+%{_datadir}/glib-2.0/schemas/org.gnome.baobab.gschema.xml
+%{_datadir}/glib-2.0/schemas/org.gnome.dictionary.gschema.xml
+%{_datadir}/glib-2.0/schemas/org.gnome.gnome-screenshot.gschema.xml
+%{_datadir}/glib-2.0/schemas/org.gnome.gnome-system-log.gschema.xml
+%{_datadir}/gnome-dictionary/
 %{_datadir}/gnome-screenshot
 %{_datadir}/gnome-utils
-%{_datadir}/gnome-2.0/ui/*
-%_libexecdir/gnome-dictionary-applet
-%_datadir/gdict*
-%{_datadir}/gnome-dictionary/
-%dir %{_datadir}/omf/*
-%{_datadir}/omf/*/*-C.omf
-%_datadir/icons/hicolor/*/apps/*
-%{_mandir}/*/*
+%{_datadir}/icons/hicolor/*/apps/*
 %{_datadir}/pixmaps/*
+%{_datadir}/thumbnailers/gnome-font-viewer.thumbnailer
+%{_mandir}/man1/*
 
-%files -n %libname
-%defattr(-, root, root)
-%_libdir/libgdict-1.0.so.%{major}*
+%files -n %{libname}
+%{_libdir}/libgdict-%{api}.so.%{major}*
 
-%files -n %libnamedev
-%defattr(-, root, root)
-%_libdir/libgdict*.so
-%attr(644,root,root) %_libdir/libgdict*a
-%_libdir/pkgconfig/gdict*.pc
+%files -n %{develname}
+%{_libdir}/libgdict*.so
+%{_libdir}/pkgconfig/gdict*.pc
 %{_datadir}/gtk-doc/html/gdict
-%_includedir/gdict*
+%{_includedir}/gdict*
+
