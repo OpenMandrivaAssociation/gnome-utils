@@ -14,7 +14,7 @@ URL: http://www.gnome.org/softwaremap/projects/gnome-utils/
 Source0: ftp://ftp.gnome.org/pub/GNOME/sources/%{name}/%{name}-%{version}.tar.xz
 
 BuildRequires:	gnome-common
-BuildRequires:	gnome-doc-utils
+BuildRequires:	gnome-doc-utils-devel
 BuildRequires:	gtk-doc
 BuildRequires:	intltool
 BuildRequires:	pkgconfig(gconf-2.0)
@@ -56,8 +56,6 @@ This is the shared library required by the GNOME Dictionary.
 
 %prep
 %setup -q
-#fix gnome-doc-utils check
-perl -p -i -e 's/gdu_cv_version_required=0.3.2/gdu_cv_version_required=0.20.10/' configure
 %build
 %configure2_5x \
 	--disable-static \
