@@ -2,8 +2,6 @@
 %define major 6
 %define libname %mklibname gdict %{api} %{major}
 %define develname %mklibname -d gdict %{api}
-%define _disable_ld_no_undefined 1
-%define _disable_ld_as_needed   1
 
 Summary: GNOME utility programs such as file search and calculator
 Name: gnome-utils
@@ -65,7 +63,7 @@ This is the shared library required by the GNOME Dictionary.
 	--disable-scrollkeeper \
 	--disable-schemas-install
 
-%make LIBS='-lgmodule-2.0 -lgthread-2.0'
+%make LIBS='-lgmodule-2.0 -lgthread-2.0 -lfreetype'
 
 %install
 rm -rf %{buildroot}
