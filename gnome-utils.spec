@@ -3,10 +3,12 @@
 %define libname %mklibname gdict %{api} %{major}
 %define develname %mklibname -d gdict %{api}
 %define _disable_ld_no_undefined 1
+%define _disable_ld_as_needed   1
 
 Summary: GNOME utility programs such as file search and calculator
 Name: gnome-utils
 Epoch: 1
+
 Version: 3.2.1
 Release: 1
 License: GPLv2+ and GFDL
