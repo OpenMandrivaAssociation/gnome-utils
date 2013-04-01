@@ -2,6 +2,7 @@
 %define major 6
 %define libname %mklibname gdict %{api} %{major}
 %define develname %mklibname -d gdict %{api}
+%define _disable_ld_no_undefined 1
 
 Summary: GNOME utility programs such as file search and calculator
 Name: gnome-utils
