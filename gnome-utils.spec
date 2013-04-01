@@ -57,7 +57,7 @@ This is the shared library required by the GNOME Dictionary.
 %prep
 %setup -q
 #fix gnome-doc-utils check
-perl -p -i -e 's/gdu_cv_version_required=0.3.2/gdu_cv_version_required=0.20.2/' configure
+perl -p -i -e 's/gdu_cv_version_required=0.3.2/gdu_cv_version_required=0.20.10/' configure
 %build
 %configure2_5x \
 	--disable-static \
