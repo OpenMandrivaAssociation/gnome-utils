@@ -1,30 +1,30 @@
-%define api 1.0
-%define major 6
+%define url_ver %(echo %{version}|cut -d. -f1,2)
+
+%define api	1.0
+%define major	6
 %define libname %mklibname gdict %{api} %{major}
-%define develname %mklibname -d gdict %{api}
+%define devname %mklibname -d gdict %{api}
 
-Summary: GNOME utility programs such as file search and calculator
-Name: gnome-utils
-Epoch: 1
-
-Version: 3.2.1
-Release: 1
-License: GPLv2+ and GFDL
-Group:  Graphical desktop/GNOME
-URL: http://www.gnome.org/softwaremap/projects/gnome-utils/
-Source0: ftp://ftp.gnome.org/pub/GNOME/sources/%{name}/%{name}-%{version}.tar.xz
+Summary:	GNOME utility programs such as file search and calculator
+Name:		gnome-utils
+Epoch:		1
+Version:	3.2.1
+Release:	1
+License:	GPLv2+ and GFDL
+Group:		Graphical desktop/GNOME
+Url:		http://www.gnome.org/softwaremap/projects/gnome-utils/
+Source0:	ftp://ftp.gnome.org/pub/GNOME/sources/gnome-utils/%{url_ver}/%{name}-%{version}.tar.xz
 
 BuildRequires:	gnome-common
-BuildRequires:	gnome-doc-utils-devel
 BuildRequires:	gtk-doc
 BuildRequires:	intltool
 BuildRequires:	pkgconfig(gconf-2.0)
 BuildRequires:	pkgconfig(glib-2.0)
+BuildRequires:	pkgconfig(gnome-doc-utils)
 BuildRequires:	pkgconfig(gsettings-desktop-schemas)
 BuildRequires:	pkgconfig(gthread-2.0)
 BuildRequires:	pkgconfig(gtk+-3.0)
-#BuildRequires:	pkgconfig(ice)
-BuildRequires:	libice-devel
+BuildRequires:	pkgconfig(ice)
 BuildRequires:	pkgconfig(libcanberra-gtk3)
 BuildRequires:	pkgconfig(libgtop-2.0)
 BuildRequires:	pkgconfig(sm)
@@ -40,19 +40,18 @@ your day just that little bit brighter - System Log Viewer,
 Search Tool, Dictionary.
 
 %package -n %{libname}
-Group: System/Libraries
-Summary: GNOME dictionary shared library
+Group:		System/Libraries
+Summary:	GNOME dictionary shared library
 
 %description -n %{libname}
 This is the shared library required by the GNOME Dictionary.
 
-%package -n %{develname}
-Group: Development/C
-Summary: GNOME dictionary library development files
-Requires: %{libname} = %{EVRD}
-Provides: libgdict1.0-devel = %{EVRD}
+%package -n %{devname}
+Group:		Development/C
+Summary:	GNOME dictionary library development files
+Requires:	%{libname} = %{EVRD}
 
-%description -n %{develname}
+%description -n %{devname}
 This is the shared library required by the GNOME Dictionary.
 
 %prep
@@ -66,7 +65,6 @@ This is the shared library required by the GNOME Dictionary.
 %make LIBS='-lgmodule-2.0 -lgthread-2.0 -lfreetype'
 
 %install
-rm -rf %{buildroot}
 %makeinstall_std
 rm -rf %{buildroot}/var
 rm -fv %{buildroot}%{_bindir}/test-reader
@@ -121,15 +119,15 @@ EOF
 %{_datadir}/gnome-dictionary/
 %{_datadir}/gnome-screenshot
 %{_datadir}/gnome-utils
-%{_datadir}/icons/hicolor/*/apps/*
 %{_datadir}/pixmaps/*
 %{_datadir}/thumbnailers/gnome-font-viewer.thumbnailer
+%{_iconsdir}/hicolor/*/apps/*
 %{_mandir}/man1/*
 
 %files -n %{libname}
 %{_libdir}/libgdict-%{api}.so.%{major}*
 
-%files -n %{develname}
+%files -n %{devname}
 %{_libdir}/libgdict*.so
 %{_libdir}/pkgconfig/gdict*.pc
 %{_datadir}/gtk-doc/html/gdict
