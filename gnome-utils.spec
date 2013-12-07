@@ -9,7 +9,7 @@ Summary:	GNOME utility programs such as file search and calculator
 Name:		gnome-utils
 Epoch:		1
 Version:	3.2.1
-Release:	4
+Release:	5
 License:	GPLv2+ and GFDL
 Group:		Graphical desktop/GNOME
 Url:		http://www.gnome.org/softwaremap/projects/gnome-utils/
